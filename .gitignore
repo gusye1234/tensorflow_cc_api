@@ -1,6 +1,6 @@
 tensorflow_deps/
 .DS_Store
-hello_c
-hello_cc
+c_demo
+cc_demo
 fixtures
 .vscode/

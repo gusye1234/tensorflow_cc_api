@@ -1,1 +1,6 @@
-tensorflow_include
+tensorflow_deps/
+.DS_Store
+hello_c
+hello_cc
+fixtures
+.vscode/

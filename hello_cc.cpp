@@ -14,18 +14,6 @@
 static const int IMG_SIZE = 784;
 static const int NUM_SAMPLES = 10000;
 
-// tensorflow::Tensor load_npy_img(const std::string &filename) {
-//   auto data = xt::load_npy<float>(filename);
-//   tensorflow::Tensor t(tensorflow::DT_FLOAT,
-//                        tensorflow::TensorShape({NUM_SAMPLES, IMG_SIZE}));
-
-//   for (int i = 0; i < NUM_SAMPLES; i++)
-//     for (int j = 0; j < IMG_SIZE; j++)
-//       t.tensor<float, 2>()(i, j) = data(i, j);
-
-//   return t;
-// }
-
 std::vector<int> get_tensor_shape(const tensorflow::Tensor &tensor) {
   std::vector<int> shape;
   auto num_dimensions = tensor.shape().dims();
@@ -36,6 +24,7 @@ std::vector<int> get_tensor_shape(const tensorflow::Tensor &tensor) {
 }
 
 template <typename M> void print_keys(const M &sig_map) {
+  std::cout << "Hello, start printing\n";
   for (auto const &p : sig_map) {
     std::cout << "key : " << p.first << std::endl;
   }
@@ -65,9 +54,7 @@ int main() {
   // Fills in this from a session run call
   std::vector<tensorflow::Tensor> out;
 
-  std::string dir = "pyfiles/foo";
-  std::string npy_file = "pyfiles/data.npy";
-  std::string prediction_npy_file = "pyfiles/predictions.npy";
+  std::string dir = "./fixtures/aiy_vision_classifier_birds_V1_1";
 
   std::cout << "Found model: " << tensorflow::MaybeSavedModelDirectory(dir)
             << std::endl;
@@ -82,35 +69,10 @@ int main() {
   // not sure why it's called this but upon running this for loop to check for
   // keys we see it.
   print_keys(sig_map);
-  std::string sig_def = "serving_default";
+  std::string sig_def = "";
   auto model_def = sig_map.at(sig_def);
   auto inputs = model_def.inputs().at(_input_name);
   auto input_name = inputs.name();
   auto outputs = model_def.outputs().at(_output_name);
   auto output_name = outputs.name();
-
-  //   auto input = load_npy_img(npy_file);
-
-  //   TF_CHECK_OK(
-  //       bundle.session->Run({{input_name, input}}, {output_name}, {}, &out));
-  //   std::cout << out[0].DebugString() << std::endl;
-
-  //   auto res = out[0];
-  //   auto shape = get_tensor_shape(res);
-  //   // we only care about the first dimension of shape
-  //   xt::xarray<float> predictions = xt::zeros<float>({shape[0]});
-  //   for (int row = 0; row < shape[0]; row++) {
-  //     float max = FLT_MIN;
-  //     int max_idx = -1;
-  //     for (int col = 0; col < shape[1]; col++) {
-  //       auto val = res.tensor<float, 2>()(row, col);
-  //       if (max < val) {
-  //         max_idx = col;
-  //         max = val;
-  //       }
-  //     }
-  //     predictions(row) = max_idx;
-  //   }
-
-  //   xt::dump_npy(prediction_npy_file, predictions);
 }

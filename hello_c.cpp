@@ -50,8 +50,12 @@ static TF_Buffer *ReadBufferFromFile(const char *file) {
   return buf;
 }
 
-int main() {
-  auto buffer = ReadBufferFromFile("./fixtures/frozen.pb");
+int main(int argc, char *argv[]) {
+  if (argc != 2) {
+    std::cout << "You should input the model weight path" << std::endl;
+    return 2;
+  }
+  auto buffer = ReadBufferFromFile(argv[1]);
   if (buffer == nullptr) {
     std::cout << "Can't read buffer from file" << std::endl;
     return 1;

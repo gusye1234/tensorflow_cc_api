@@ -37,7 +37,12 @@ template <typename K, typename M> bool assert_in(const K &k, const M &m) {
 std::string _input_name = "digits";
 std::string _output_name = "predictions";
 
-int main() {
+int main(int argc, char *argv[]) {
+  if (argc != 3) {
+    std::cout << "You should input the export dir and tag set name"
+              << std::endl;
+    return 0;
+  }
   // This is passed into LoadSavedModel to be populated.
   tensorflow::SavedModelBundle bundle;
 
@@ -54,7 +59,8 @@ int main() {
   // Fills in this from a session run call
   std::vector<tensorflow::Tensor> out;
 
-  std::string dir = "./fixtures/aiy_vision_classifier_birds_V1_1";
+  std::string dir = argv[1];
+  std::string sig_def = argv[2];
 
   std::cout << "Found model: " << tensorflow::MaybeSavedModelDirectory(dir)
             << std::endl;
@@ -69,10 +75,11 @@ int main() {
   // not sure why it's called this but upon running this for loop to check for
   // keys we see it.
   print_keys(sig_map);
-  std::string sig_def = "";
   auto model_def = sig_map.at(sig_def);
   auto inputs = model_def.inputs().at(_input_name);
   auto input_name = inputs.name();
   auto outputs = model_def.outputs().at(_output_name);
   auto output_name = outputs.name();
+
+  return 0;
 }
